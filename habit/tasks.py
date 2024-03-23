@@ -1,11 +1,20 @@
+from datetime import datetime
 from celery import shared_task
-from django.core.mail import send_mail
-from config import settings
 from habit.models import Habit
-from users.models import User
+from habit.services import create_message, create_bot_telegramm
 
 
 @shared_task
 def send_message_about_habit():
-    habit = Habit.objects.all()
+    now_time = datetime.now().time()
+    habits = Habit.objects.all()
+    for habit in habits:
+        if now_time == habit.time:
+            text = create_message(habit)
+            create_bot_telegramm(text)
+
+
+
+
+
 
