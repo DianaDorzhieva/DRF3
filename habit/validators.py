@@ -13,9 +13,9 @@ class Check_habit:
         habit_related = dict(value).get(self.field3)
         if habit_related and reward:
             raise ValidationError('Нельзя использовать связанную привычку и вознагрождение')
-        if habit_related and not is_habit_good:
-            raise ValidationError('В связанные привычки могут попадать только привычки с признаком приятной привычки')
-        if is_habit_good and reward and habit_related:
+        if habit_related and not habit_related.is_habit_good:
+            raise ValidationError('В связанные привычки можно добавлять привычки только с признаком приятной')
+        if (is_habit_good and reward) or (is_habit_good and habit_related):
             raise ValidationError('У приятной привычки не может быть вознагрождения или связанной привычки')
 
 
@@ -27,6 +27,3 @@ class Check_time:
         time_to_complete = dict(value).get(self.field)
         if time_to_complete and time_to_complete > 120:
             raise ValidationError('Время выполнения не должно превышать 120 секунд')
-
-
-

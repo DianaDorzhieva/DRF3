@@ -11,10 +11,5 @@ def send_message_about_habit():
     for habit in habits:
         if now_time == habit.time:
             text = create_message(habit)
-            create_bot_telegramm(text)
-
-
-
-
-
-
+            chat_id = habit.user.chat_id
+            create_bot_telegramm(chat_id, text)

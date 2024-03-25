@@ -34,14 +34,14 @@ def create_message(habit):
     return f'Я буду {habit.action} в {habit.time} в {habit.place}'
 
 
-def create_bot_telegramm(text):
+def create_bot_telegramm(chat_id, text):
     URL = 'https://api.telegram.org/bot'
     TOKEN = settings.TOKEN_TELEGRAM
 
     requests.post(
         url=f'{URL}{TOKEN}/sendMessage',
         data={
-            'chat_id': '1089245849',
+            'chat_id': chat_id,
             'text': text
         }
 

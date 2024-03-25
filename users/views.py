@@ -1,6 +1,5 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
 from users.models import User
 from users.serialazers import UserSerializer, UserListSerializer
 
@@ -8,7 +7,7 @@ from users.serialazers import UserSerializer, UserListSerializer
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
     queryset = User.objects.all()
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
@@ -25,7 +24,6 @@ class UserUpdateAPIView(generics.UpdateAPIView):
 
 class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
-
 
 
 class UserDestroyAPIView(generics.DestroyAPIView):
