@@ -1,0 +1,68 @@
+version: '3' # Версия указывает на версию синтаксиса
+# Лучше использовать актуальную версию, которая рекомендуется в документации
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5435:5432"
+    env_file:
+      - .env
+    volumes:
+        - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+
+  app:
+    build: .
+    tty: true
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/code
+    depends_on:
+        db:
+          condition: service_healthy
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+
+  celery:
+      build: .
+      tty: true
+      command: celery -A config worker -l INFO
+      env_file:
+        - .env
+      depends_on:
+        - redis
+        - app
+
+  celery_beat:
+      build: .
+      tty: true
+      command: celery -A config beat -l INFO -S django
+      env_file:
+        - .env
+      depends_on:
+        - redis
+        - app
+
+
+
+volumes:
+    pgdata:
+
+
