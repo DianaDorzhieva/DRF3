@@ -86,11 +86,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shelter',
+        # 'NAME': 'shelter',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '12345',
         'PORT': '5432',
-        'HOST': 0000
+        'HOST': 'db'
     }
 }
 
@@ -127,6 +128,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -169,11 +172,11 @@ if CACHE_ENABLED:
             "LOCATION": 'redis://127.0.0.1:6379',
         }
     }
-REDIS_HOST = '127.0.0.1:6379'
-REDIS_PORT = '6379'
-CELERY_BROKER_URL = "redis://127.0.0.1:6379:6379/0"
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = os.getenv('REDIS_PORT')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
-CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
@@ -184,8 +187,8 @@ CELERY_TIMEZONE = 'Europe/London'
 CELERY_BEAT_SCHEDULE = {
     'task-name': {
         'task': 'habit.tasks.send_message_about_habit',
-        'shedule': timedelta(days=1)
-    }
+        'schedule': timedelta(minutes=1),
+    },
 }
 
 CORS_ALLOWED_ORIGINS = [
