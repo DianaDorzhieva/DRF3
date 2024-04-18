@@ -22,7 +22,7 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-49%)*wg)$xy-ac2%wzn)=p^b9*-hnx02=(vdf3o$tla&z2@j1s'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -87,10 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'shelter',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '12345',
-        'PORT': '5432',
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'PORT': os.getenv('PORT'),
         'HOST': 'db'
     }
 }
@@ -153,11 +153,11 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=800),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
-API_KEY = 'sk_test_51OqtSpHQf9GbVGuPTqjWkjj7msLosm0s9fNvXDggHJwCggpIoNIpWP0TB1RsXiT6hiOcKYwkSpjrUFQTABCShUeg00Xd6ss4uM'
+API_KEY = os.getenv('API_KEY')
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'd.abdrahm4nova@yandex.ru'
-EMAIL_HOST_PASSWORD = 'ijeklilpqwqbztv'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -169,7 +169,7 @@ if CACHE_ENABLED:
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": 'redis://127.0.0.1:6379',
+            "LOCATION": os.getenv('CACHE_LOCATION'),
         }
     }
 REDIS_HOST = os.getenv('REDIS_HOST')
